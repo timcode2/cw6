@@ -107,7 +107,6 @@ class ClientCreateView(CreateView, LoginRequiredMixin):
 
         mailing = form.save()  # сохранение информации о созданной рассылке
         mailing.owner = self.request.user  # присваиваем атрибуту owner ссылку на текущего пользователя
-        send_email_tasks()
         mailing.save()
         return super().form_valid(form)
 
@@ -125,7 +124,6 @@ class MessageCreateView(CreateView, LoginRequiredMixin):
 
         mailing = form.save()  # сохранение информации о созданной рассылке
         mailing.owner = self.request.user  # присваиваем атрибуту owner ссылку на текущего пользователя
-        send_email_tasks()
         mailing.save()
         return super().form_valid(form)
 
