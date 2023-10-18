@@ -102,6 +102,16 @@ class ClientCreateView(CreateView, LoginRequiredMixin):
     success_url = reverse_lazy('service:create')
     fields = ('email', 'name', 'surname', 'patronymic', 'comment')
 
+    def form_valid(self, form):
+        """Добавление в создаваемый продукт информации об авторизованном пользователе"""
+
+        mailing = form.save()  # сохранение информации о созданной рассылке
+        mailing.owner = self.request.user  # присваиваем атрибуту owner ссылку на текущего пользователя
+        send_email_tasks()
+        mailing.save()
+        return super().form_valid(form)
+
+
 
 class MessageCreateView(CreateView, LoginRequiredMixin):
     """Класс-представление для создания сообщения"""
@@ -109,6 +119,16 @@ class MessageCreateView(CreateView, LoginRequiredMixin):
     model = MailingMessage
     fields = ('title', 'message')
     success_url = reverse_lazy('service:create')
+
+    def form_valid(self, form):
+        """Добавление в создаваемый продукт информации об авторизованном пользователе"""
+
+        mailing = form.save()  # сохранение информации о созданной рассылке
+        mailing.owner = self.request.user  # присваиваем атрибуту owner ссылку на текущего пользователя
+        send_email_tasks()
+        mailing.save()
+        return super().form_valid(form)
+
 
 
 def disable_mailing(pk):
